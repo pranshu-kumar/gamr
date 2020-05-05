@@ -1,4 +1,3 @@
-
 :root{
 	--primary: #009933;
 	--secondary: #171717;
@@ -14,6 +13,14 @@ body
 	background-size: cover;
 	overflow-x: hidden;
 	font-family: consolas;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
 }
 
 .page{
@@ -27,9 +34,9 @@ body
 	box-sizing: border-box;
 }
 .menu-wrapper{
-	position: fixed;
-	top: 15px;
-	right: 70px;
+	position: absolute;
+	top: 4%;
+	right: 3%;
 	width: 50px;
 	height: 50px;
 	box-sizing: border-box;
@@ -134,7 +141,7 @@ body
 	width: 20vw;
 	height: 100vh;
 }
-.banner-area h2{
+.banner-area h1{
 	position: absolute;
 	top: 20%;
 	left: 50%;
@@ -147,13 +154,31 @@ body
 	color: #fff;
 	font-size: 2.5em;
 }
-.banner-area h2 span{
+
+.banner h3{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	width: 100%;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	font-family: Century Gothic;
+	color: #fff;
+	font-size: 2.5em;
+}
+.banner h3 span{
+	color: #009933
+}
+.banner-area h1 span{
 	color: #009933
 }
 .project{
 	position: absolute;
-	bottom: 12%;
-	left: 47.15%;
+	margin-left: auto;
+	margin-right: auto;
+	bottom: 12.5%;
 	font-family: Century Gothic;
 	color: #fff;
 	font-size: 15px;
@@ -171,8 +196,8 @@ body
 }
 .container{
 	position: absolute;
-	top: 100px;
-	right: 325px;
+	margin-right: auto;
+	margin-left: auto;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -182,7 +207,7 @@ body
 	position: relative;
 	padding: 5px;
 }
-.container .card-custom .face{
+.container .card .face{
 	width: 300px;
 	height: 200px;
 	transition: 0.5s;
