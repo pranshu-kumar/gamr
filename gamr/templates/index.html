@@ -19,7 +19,7 @@
 			<div class="menu">
 				<ul>
 					<li><a href="{% url 'home' %}">Home</a></li>
-					<li><a href="{% url 'home' %}">Meeting</a></li>
+					<li><a href="{% url 'meeting:all' %}">Meeting</a></li>
 					<li><a href="{% url 'home' %}">Study</a></li>
 					<li><a href="{% url 'home' %}">About</a></li>
 					<li><a href="{% url 'home' %}">Settings</a></li>
@@ -85,7 +85,7 @@
 					Dont worry! We got you covered. Meeting mode will
 					record your entire meeting and generate a well prepared
 					summary for you.</p>
-					<a href="{% url 'meeting:meeting-mode' %}">Continue</a>
+					<a href="{% url 'meeting:all' %}">Continue</a>
 				</div>
 			</div>
 		</div>

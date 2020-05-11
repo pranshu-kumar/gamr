@@ -1,0 +1,46 @@
+body{
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+	background-image: linear-gradient(rgba(0,0,0,0.8),rgba(0,0,0,0.6)),url(Background.jpg);
+	background-position: center;
+	background-size: cover;
+	overflow-x: hidden;
+	font-family: consolas;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+}
+
+.container-list{
+	top: 10%;
+	position: absolute;
+}
+
+.meeting-card{
+	border: 2px solid #fff;
+	text-align:center;
+	padding: 10px;
+	color:white;
+	margin-top: 20px;
+	border-radius:15px;
+}
+.meeting-card .summary{
+	margin-top:25px;
+	overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 4; 
+   -webkit-box-orient: vertical;
+}
+.meeting-card .date{
+	text-align:left;
+}
+hr {
+	border: 0;
+	clear:both;
+	display:block;
+	width: 96%;               
+	background-color:#fff;
+	height: 1px;
+  }

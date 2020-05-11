@@ -16,6 +16,11 @@ body
 	color: white;
 }
 
+a {
+    color: #fff;
+    text-decoration: none;
+}
+
 .page{
 	width: 100vw;
 	height: 100vh;
@@ -168,4 +173,13 @@ body
 	bottom: 5%;
 	left: 50%;
 	transform: translate(-50%,-50%);
+}
+
+.meeting-container{
+	overflow: auto;
+	white-space: nowrap;
+}
+
+.meeting-container .meeting-card{
+	display: inline-block;
 }

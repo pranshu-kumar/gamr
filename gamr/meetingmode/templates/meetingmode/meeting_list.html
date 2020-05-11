@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<a href="{% url 'meeting:create' %}" class="btn btn-outline-light btn-lg">
+    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  Create Meeting
+</a>
+<a href="{% url 'meeting:create' %}" class="btn btn-outline-light btn-lg mx-3">
+    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  Join Meeting
+</a>
+<hr>
+<div class="row my-3" >
+    {% for meeting in object_list %}
+        {% if user in meeting.members.all %}
+                <div class="col-sm-6" >
+                    <div class="card border-green bg-success text-white mb-3" style="max-width: 18rem;">
+                        <div class="card-header">
+                            <a href="{% url 'meeting:room' slug=meeting.slug %}" class="btn btn-outline-dark btn-sm">>> Go to Meeting Dashboard</a>
+                        </div>
+                        <div class="card-body text-dark">
+                          <h5 class="card-title">{{meeting.meeting_name}}</h5>
+                          <p class="card-text">{{meeting.description}}</p>
+                          <div class="card-footer text-dark">
+                              <p>{{meeting.created_at}}</p>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+        {% endif %}
+    {% endfor %}
+</div>
+</div>
+{% endblock content %}
+

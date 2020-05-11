@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+{% load bootstrap3 %}
+    <h3>What Chat Room would you like to enter?</h3>
+    <form method="POST" action="{% url 'meeting:create' %}">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input id="go-to-meeting" type="submit" class="btn btn-outline-light" value="Create/Join Meeting">
+        <input id="generate-code" type="button" class="btn btn-outline-light mx-3" value="Generate Code">
+    </form>
+        
+    <script>
+        function makeMeetingCode() {
+            var result           = '';
+            var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for ( var i = 0; i < 6; i++ ) {
+               result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+         }
+
+        var codeField = document.querySelector('#id_meeting_code');
+        var submit = document.querySelector('#go-to-meeting');
+        document.querySelector('#id_meeting_code').focus();
+        var roomName;
+        document.querySelector('#generate-code').onclick = function(e) {
+            roomName = makeMeetingCode();
+            codeField.value = roomName;
+            //codeField.disabled = true;
+            document.querySelector('#generate-code').disabled = true;
+        };
+        // submit.onclick = function(e) {
+        //    window.location.pathname = '/meeting/dashboard' + roomName + '/';
+        // }
+    </script>
+{% endblock content %}
