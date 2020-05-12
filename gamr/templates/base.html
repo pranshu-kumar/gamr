@@ -1,55 +1,186 @@
 <!DOCTYPE html>
 {% load static %}
-<html lang="en">
+<html class="no-js" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAMR - Your Work Optimization Kit!</title>
-    </head>
-	<link rel="stylesheet" href="{% static 'css/list.css' %}">
 
-	<!-- Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!--- basic page needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <title>Optimo</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <!-- mobile specific metas
+    ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+	<link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+    <!-- script
+    ================================================== -->
+    <script src="{% static 'js/modernizr.js' %}"></script>
+    <script src="{% static 'js/pace.min.js' %}"></script>
+
+    <!-- favicons
+    ================================================== -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+</head>
+
+<body id="top">
+
+    <!-- preloader
+    ================================================== -->
+
+
+    <!-- header 
+    ================================================== -->
+    <header class="s-header">
+
+        <div class="row">
+            <div class="header-logo">
+                <a class="site-logo" href="index.html">
+                    <img src="{% static 'images/logo.svg' %}" alt="Homepage">
+                </a>
+            </div>
     
-	<!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/master.css' %}">
-	<link rel="stylesheet" href="{% static 'css/list.css' %}">
+            <nav class="header-nav-wrap">
+                <ul class="header-main-nav">
+                    <li class="current"><a class="" href="{% url 'home' %}" title="Home">Home</a></li>
+                    <li><a class="smoothscroll" href="#about" title="About Us">About</a></li>
+                    <li><a class="smoothscroll" href="#features" title="Features">Features</a></li>
+                    <li><a class="smoothscroll" href="{% url 'meeting:all' %}" title="Meeting">Meeting</a></li>
+                    <li><a class="smoothscroll" href="#" title="Get Started">Study</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'accounts:logout' %}" title="Logout">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'accounts:login' %}" title="Login">Login</a></li>
+                        <li><a href="{% url 'accounts:signup' %}" title="Signup">Signup</a></li>
+                    {% endif %}
+                </ul>
 
-<body>
-    <div class="page">
-		<div class="menu-wrapper">
-			<input type="checkbox" class="toggle" />
+                {% if user.is_authenticated %}
+                    <div class="header-cta">
+                        <a href="#" class="btn btn--primary header-cta__btn">Hey {{user.username}}!</a>
+                    </div>
+                {% endif %}
 
-			<div class="hamburger">
-				<div class="bar">
-					
-				</div>	
-			</div>
-			<div class="menu">
-				<ul>
-					<li><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-					<li><a class="nav-link" href="#">Meeting</a></li>
-					<li><a class="nav-link" href="#">Study</a></li>
-					<li><a class="nav-link" href="#">About</a></li>
-					<li><a class="nav-link" href="#">Settings</a></li>
-					{% if user.is_authenticated %}
-					<li><a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a></li>
-					{% else %}
-					<li><a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a></li>
-					<li><a class="nav-link" href="{% url 'accounts:login' %}">Login</a></li>
-					{% endif %}
-				</ul>
-			</div>
-		</div>
-		<div class="container">
-			{% block content %}
-				
-			{% endblock content %}
-		</div>
-    </div>
+                
+            </nav> <!-- end header-nav-wrap -->
+    
+            <a class="header-menu-toggle" href="#"><span>Menu</span></a>
+        </div>
+
+    </header> <!-- end header -->
+    
+    
+    {% block content %}
+    
+    {% endblock content %}
+
+
+    <!-- footer
+    ================================================== -->
+    <footer class="s-footer footer">
+
+        <div class="row section-header align-center">
+            <div class="col-full">
+                <h1 class="display-1">
+                    Let's Stay In Touch.
+                </h1>
+                <p class="lead">
+                Contact Us for Company/ Institute/ Organization tie-ups. 
+                </p>
+            </div>
+        </div> <!-- end section-header -->
+
+        <div class="row footer__top">
+
+            <div class="col-full footer__subscribe end">
+                <div class="subscribe-form">
+                    <form id="mc-form" class="group" novalidate="true">
+
+                        <input type="email" value="" name="EMAIL" class="email" id="mc-email" placeholder="Email Address" required="">
+            
+                        <input type="submit" name="subscribe" value="Sign Up">
+            
+                        <label for="mc-email" class="subscribe-message"></label>
+            
+                    </form>
+                </div>
+            </div>
+
+        </div> <!-- end footer__top -->
+
+        <div class="row footer__bottom">
+
+            <div class="footer__about col-five tab-full left">
+
+                <h4>About Optimo.</h4>
+
+                <p>
+                Optimo is a project initiated by GAMR.
+                </p>
+
+
+            </div>
+
+            <div class="col-five md-seven tab-full right end">
+                <div class="row">
+
+                    <div class="footer__site-links col-five mob-full">
+                        <h4>Site links.</h4>
+
+                        <ul class="footer__site-links">
+                            <li><a href="#home" class="smoothscroll">Home</a></li>
+                            <li><a href="#about" class="smoothscroll">About</a></li>
+                            <li><a href="#pricing" class="smoothscroll">Pricing</a></li>
+                            <li><a href="#download" class="smoothscroll">Get Started</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer__contact col-seven mob-full">
+                        <h4>Contact Us.</h4>
+
+                        <p>
+                        Phone: (+91) 0000000000 <br>
+                        </p>
+                        <p>
+                        Need help or have a question? Contact us at: <br>
+                        <a href="mailto:#0" class="footer__mail-link">------@iitgn.ac.in</a>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-full ss-copyright">
+                <span>&copy; Copyright Kairos 2018</span> 
+                <span>Design inspired from <a href="https://www.styleshout.com/">styleshout</a></span>
+            </div>
+
+        </div> <!-- end footer__bottom -->
+
+        <div class="go-top">
+            <a class="smoothscroll" title="Back to Top" href="#top"></a>
+        </div>
+
+    </footer> <!-- end s-footer -->
+
+
+
+    <!-- Java Script
+    ================================================== -->
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

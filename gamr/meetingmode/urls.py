@@ -16,4 +16,5 @@ urlpatterns = [
     path('join/<slug>', JoinMeeting.as_view(), name="join"),
     path('dashboard/<slug>', DashboardView.as_view(), name='room'),
     path('leave-meeting/<slug>', LeaveMeeting.as_view(), name='leave'),
+    path('leave-meeting/<slug>', LeaveMeeting.as_view(), name='leave'),
 ]

@@ -1,0 +1,55 @@
+form{
+    color: white;
+}
+
+p{
+    color: white;
+}
+
+::placeholder{
+    color: darkgray;
+}
+
+input[type=text]{
+    color: white;
+    text-align: center;
+    border: 1px solid white;
+}
+
+input[type=text]:focus{
+    color: darkgray;
+}
+
+input[type=password]{
+    color: white;
+    text-align: center;
+    border: 1px solid white;
+}
+
+input[type=password]:focus{
+    color: darkgray;
+}
+
+input[type=email]{
+    color: white;
+    text-align: center;
+    border: 1px solid white;
+}
+
+textarea{
+    color: white;
+    text-align: center;
+    border: 1px solid white;
+}
+
+textarea:focus{
+    color: darkgray;
+}
+
+input[type=email]:focus{
+    color: darkgray;
+}
+
+label{
+    color: white;
+}

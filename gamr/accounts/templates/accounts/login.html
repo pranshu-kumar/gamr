@@ -1,12 +1,21 @@
 {% extends "base.html" %}
-{% load bootstrap3 %}
+{% load static %}
 {% block content %}
-  <h1>Login</h1>
-  <form method="POST">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    <input type="submit" class="btn btn-outline-light" value="Login">
-  </form>
-
-
+<section id="home" class="s-home target-section" data-parallax="scroll" data-image-src="{% static 'images/hero-bg.jpg' %}" data-natural-width=3000 data-natural-height=2000 data-position-y=center>
+  <div class="shadow-overlay"></div>
+  <div class="home-content">
+    <div class="row home-content__main">
+      <div class="home-content__left">
+    </div>
+    <div class="row process-wrap">
+    <h1>Login</h1>
+    <form method="POST">
+      {% csrf_token %}
+      {{form.as_p}}
+      <input type="submit" value="Login">
+    </form>
+  </div>
+</div>
+</div>
+</section>
 {% endblock content %}

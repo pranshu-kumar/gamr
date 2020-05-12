@@ -1,14 +1,22 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-{% load bootstrap3 %}
-    <h3>What Chat Room would you like to enter?</h3>
+<section id="home" class="s-home target-section" data-parallax="scroll" data-image-src="{% static 'images/hero-bg.jpg' %}" data-natural-width=3000 data-natural-height=2000 data-position-y=center>
+  <div class="shadow-overlay"></div>
+  <div class="home-content">
+    <div class="row home-content__main">
+      <div class="home-content__left">
+    <h1>Create a Meeting Room:</h1>
     <form method="POST" action="{% url 'meeting:create' %}">
         {% csrf_token %}
-        {% bootstrap_form form %}
+        {{form.as_p}}
         <input id="go-to-meeting" type="submit" class="btn btn-outline-light" value="Create/Join Meeting">
         <input id="generate-code" type="button" class="btn btn-outline-light mx-3" value="Generate Code">
     </form>
-        
+      </div>
+    </div>
+  </div>
+</section>        
     <script>
         function makeMeetingCode() {
             var result           = '';

@@ -4,6 +4,24 @@
 
 <head>
   <meta charset="utf-8" />
+
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+<script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+
+<!-- SnackbarJS plugin -->
+<script src="https://cdn.rawgit.com/FezVrasta/snackbarjs/1.1.0/dist/snackbar.min.js"></script>
+
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+<script>
+  $('body').bootstrapMaterialDesign();
+</script>
+
   <link rel="apple-touch-icon" sizes="76x76" href="{% static 'meetingmode/img/apple-icon.png' %}">
   <link rel="icon" type="image/png" href="{% static 'meetingmode/img/favicon.png' %}">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -21,11 +39,6 @@
 <body class="dark-edition">
   <div class="wrapper ">
     <div class="sidebar" data-color="purple" data-background-color="black" data-image="{% static 'meetingmode/img/sidebar-2.jpg' %}">
-      <!--
-        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
-
-        Tip 2: you can also add an image using data-image tag
-    -->
       <div class="logo"><a href="{% url 'home' %}" class="simple-text logo-normal">
           GAMR
         </a></div>
@@ -43,10 +56,17 @@
               <p>User Profile</p>
             </a>
           </li>
-          <li class="nav-item ">
+          <li class="nav-item-active">
             <a class="nav-link" href="#">
-              <i class="material-icons">content_paste</i>
-              <p>Start Meeting</p>
+              <i id="start-icon" class="material-icons">keyboard_voice</i>
+              <p id="start-meeting">Start Meeting</p>
+              <!-- <script src="{% static 'meetingmode/js/recording.js' %}"></script> -->
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="material-icons">stop</i>
+              <p id="stop-meeting">Stop Meeting</p>
             </a>
           </li>
         </ul>
@@ -106,9 +126,38 @@
 
       <div class="content">
         <div class="container-fluid">
+          <div class="row" >
+            <div class="col-xl-4 col-lg-12" >
+            <h4>Share Meeting Room Link: </h4>
+            <p class="text-light" id="meeting-link">http://127.0.0.1:8000/meeting/join/{{meeting.slug}}</p>
+              <button id="copy-clipboard" class="btn btn-sm btn-primary" data-toggle="snackbar" data-content="Copied!">
+                <span>
+                  <i class="material-icons">content_copy</i>
+                </span>
+              </button>
+              
+            <script>
+                var copy = document.querySelector('#copy-clipboard');
+                var link = document.querySelector("#meeting-link");        
+                copy.addEventListener('click', function(){
+                var elem = document.createElement("textarea");
+                document.body.appendChild(elem);
+                elem.value = link.innerHTML;
+                elem.select();
+                document.execCommand("copy");
+                document.body.removeChild(elem);
+              });
+            </script>
+
+          </div>
+          <div class="col-xl-4 col-lg-12" >
+            <h4>Meeting Description</h4>
+            <p class="text-light">{{meeting.description}}</p>
+          </div>
+          </div>
           <div class="row">
 
-
+            
           	<!-- Notes card -->
             <div class="col-xl-4 col-lg-12">
               <div class="card card-chart">
@@ -118,8 +167,8 @@
                     <span class="text-success">Keep Track </span> of the important points discussed.</p>
                 </div>
                 <div class="notesbox">
-                	<p>The most important points that are dicussed in the meeting will appear here for your
-                	reference. There is no need to take notes, we will do that job for you!</p>
+                	<p id="summary">
+                  </p>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -138,9 +187,9 @@
                   <p class="card-category">Your entire meeting would be recorded here, word to word.</p>
                 </div>
                 <div class="transcriptbox">
-                  <p>Every word that is spoken during the meeting will be recorded here for your reference
-                	so that you can focus your entire attention on the meeting and not worry about making
-                	any notes or documentation.
+                  {{ meeting.meeting_code|json_script:"meeting-code" }}
+                  {{ user.username|json_script:"author" }}
+                  <p id="transcript">
                  </p>
                 </div>
                 <div class="card-footer">
@@ -561,6 +610,7 @@
 
     });
   </script>
+  <script src="{% static 'meetingmode/js/recording.js' %}"></script>
 </body>
 
 </html>

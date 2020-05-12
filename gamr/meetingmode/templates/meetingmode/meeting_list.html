@@ -2,33 +2,51 @@
 {% load static %}
 {% block content %}
 
-<a href="{% url 'meeting:create' %}" class="btn btn-outline-light btn-lg">
-    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  Create Meeting
-</a>
-<a href="{% url 'meeting:create' %}" class="btn btn-outline-light btn-lg mx-3">
-    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  Join Meeting
-</a>
-<hr>
-<div class="row my-3" >
-    {% for meeting in object_list %}
-        {% if user in meeting.members.all %}
-                <div class="col-sm-6" >
-                    <div class="card border-green bg-success text-white mb-3" style="max-width: 18rem;">
-                        <div class="card-header">
-                            <a href="{% url 'meeting:room' slug=meeting.slug %}" class="btn btn-outline-dark btn-sm">>> Go to Meeting Dashboard</a>
+    <section id="home" class="s-home target-section" data-parallax="scroll" data-image-src="{% static 'images/hero-bg.jpg' %}" data-natural-width=3000 data-natural-height=2000 data-position-y=center>
+        <div class="shadow-overlay"></div>
+        <div class="home-content">
+            <div class="row home-content__main">
+            {% if user.is_authenticated %}
+            <div class="home-content__left">
+                <a href="{% url 'meeting:create' %}" class="btn btn-outline-light btn-lg">
+                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  Create Meeting
+                </a>  
+                <a href="{% url 'meeting:create' %}" class="btn btn-outline-light btn-lg">
+                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>  Join Meeting
+                </a>      
+            </div>
+
+            <hr>
+
+            {% for meeting in object_list %}
+                {% if user in meeting.members.all %}
+                <div class="flexcontainer">
+                <div class="container">
+                    <div class="card">
+                        <div class="imgBx">
+                            <img src="{% static 'css/Business.svg' %}">
                         </div>
-                        <div class="card-body text-dark">
-                          <h5 class="card-title">{{meeting.meeting_name}}</h5>
-                          <p class="card-text">{{meeting.description}}</p>
-                          <div class="card-footer text-dark">
-                              <p>{{meeting.created_at}}</p>
-                          </div>
+                        <div class="contentBx">
+                            <h2>{{meeting.meeting_name}}</h2>
+                            <p>Meeting Description.<br>
+                            {{meeting.description}}
+                            </p>
+                            <a href="{% url 'meeting:room' slug=meeting.slug %}"><span>Continue to meeting</span></a>
+                            <a href="{% url 'meeting:leave' slug=meeting.slug %}"><span>Leave meeting</span></a>
                         </div>
-                      </div>
+                    </div>
                 </div>
+                </div>
+                {% endif %}
+            {% empty %}
+                <h2>No Meetings to show.</h2>
+            {% endfor %}
+            </div>
+        </div>
+        {% else %}
+            <h1>Please Login or Signup!</h1>
         {% endif %}
-    {% endfor %}
-</div>
-</div>
+    </section>
+
 {% endblock content %}
 

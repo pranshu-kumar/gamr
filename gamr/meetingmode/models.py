@@ -25,12 +25,26 @@ class Meeting(models.Model):
         return reverse('meeting:join', kwargs={'slug':self.slug})
 
 
+class MeetingTranscript(models.Model):
+    transcript = models.TextField()
+    author = models.ForeignKey(User, related_name='user_transcript', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    meeting = models.ForeignKey(Meeting, related_name='transcript_meeting', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.author.username
+
+    def get_last_transcript(self):
+        return self.objects.order_by('-timestamp').all()
+
+
 class MeetingMember(models.Model):
     meeting = models.ForeignKey(Meeting, related_name='memberships', on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='user_meetings', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.username
+
 
     class Meta:
         unique_together = ('meeting','user')
