@@ -11,6 +11,13 @@ recognition.continuous = true;
 recognition.interimResults = true;
 recognition.lang = 'en-IN';
 
+var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+var grammar = '#JSGF V1.0;'
+var speechRecognitionList = new SpeechGrammarList();
+speechRecognitionList.addFromString(grammar, 1);
+recognition.grammars = speechRecognitionList;
+
+
 const meetingCode = JSON.parse(document.getElementById('meeting-code').textContent);
 const author = JSON.parse(document.getElementById('author').textContent);
 
@@ -25,10 +32,9 @@ const chatSocket = new WebSocket(
 chatSocket.onmessage = function(e) {
     //console.log('message', e);
     const data = JSON.parse(e.data);
+    summary_field.innerHTML = '';
     console.log(e.data);
     summary_field.innerHTML += data.summary;
-    transcript.innerHTML += data.transcript;
-    transcript.innerHTML += '<br />';
     
 };
 
@@ -73,7 +79,10 @@ recognition.onresult = function(event) {
     {
         if(event.results[i].isFinal) {
             final_transcript = event.results[i][0].transcript;
+            console.log(final_transcript);
             const message = '<b>'+'@' + author + ': ' + '</b>' + final_transcript + '\n';
+            transcript.innerHTML += message;
+            transcript.innerHTML += '<br />';
             //console.log(final_transcript);
             // transcript.innerHTML += final_transcript;
             chatSocket.send(JSON.stringify({
