@@ -1,7 +1,11 @@
 # chat/consumers.py
+
+from asgiref.sync import sync_to_async
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from .models import MeetingTranscript
+
+from .models import MeetingInfo, Meeting
+from django.shortcuts import get_object_or_404
 
 from deepcorrect import DeepCorrect
 
@@ -10,11 +14,14 @@ from lexrank.mappings.stopwords import STOPWORDS
 from path import Path
 from nltk.tokenize import sent_tokenize
 
-
+from django.contrib.auth import get_user_model
 import os
 
 # Run the following command in terminal to connect to redis channel
 # docker run -p 6379:6379 -d redis:5 
+
+
+User = get_user_model()
 
 #Initializing DeepCorrect
 corrector = DeepCorrect('/home/pranshu/GAMR/gamr/meetingmode/deepcorrect/deeppunct_params_en','/home/pranshu/GAMR/gamr/meetingmode/deepcorrect/deeppunct_checkpoint_google_news')
@@ -53,20 +60,43 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-    async def fetch_transcript(self, data):
-        return 'fetch'
+    @sync_to_async
+    def fetch_meeting_info(self, data):
+        
+        print('fetching meeting info...')
+        meeting = Meeting.objects.get(meeting_code=self.room_name)
+        
+        try:
+            meeting_info = MeetingInfo.objects.get(meeting=meeting)
+            transcript = meeting_info.transcript
+            summary = meeting_info.summary
+            return {
+                'transcript':transcript,
+                'summary':summary
+            }
+        except:
+            print("Meeting Transcript object not created yet!")
+            MeetingInfo.objects.create(meeting=meeting)
+            meeting_info = MeetingInfo.objects.get(meeting=meeting)
+            transcript = meeting_info.transcript
+            summary = meeting_info.summary
+            return {
+                'transcript':transcript,
+                'summary':summary
+            }
+        
 
     async def summarize_transcript(self, data):
         transcript = data['raw-transcript']
 
-        print('DataCorrect begins...')
-        corrected_data = corrector.correct(transcript)
-        sentence = corrected_data[0]['sequence']
-        print(sentence)
-        print('DataCorrect Ends!')
+        # print('DataCorrect begins...')
+        # corrected_data = corrector.correct(transcript)
+        # sentence = corrected_data[0]['sequence']
+        # print(sentence)
+        # print('DataCorrect Ends!')
 
         f = open('/home/pranshu/GAMR/gamr/meetingmode/transcript.txt', 'a')
-        f.write(sentence + '\n')
+        f.write(transcript + '\n')
         f.close()
 
         # LexRank Begins
@@ -83,7 +113,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         req_sentences=[]
         for i in range(len(sentences)):    
             if scores_cont[i]>1:
-                req_sentences.append(sentences[i])
+                req_sentences.append(sentences[i]+" ")
         # print(req_sentences)
 
         final_summary = ''
@@ -107,11 +137,24 @@ class ChatConsumer(AsyncWebsocketConsumer):
         final_summary = '<p>' + summary + '</p>'
 
         return final_summary
+    
+    @sync_to_async
+    def save_meeting_info(self, final_transcript, final_summary):
+        print('Saving Transcript...')
+
+        meeting = Meeting.objects.get(meeting_code = self.room_name)
+        meeting_info = MeetingInfo.objects.get(meeting=meeting)
+        meeting_info.transcript = final_transcript
+        meeting_info.summary = final_summary
+        meeting_info.save()
+
+        print('Transcript Saved!')
 
 
     commands = {
-        'fetch_transcript':fetch_transcript,
-        'summarize_transcript':summarize_transcript
+        'fetch_meeting_info':fetch_meeting_info,
+        'summarize_transcript':summarize_transcript,
+        'save_meeting_info':save_meeting_info,
     }
 
     async def disconnect(self, close_code):
@@ -121,24 +164,50 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
+    async def send_content_data(self, transcript, summary):
+        await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'transcript': transcript,
+                    'summary':summary
+                }
+            )
+
+    async def addPunct(self,raw_transcript):
+        print("DeepCorrect begins...")
+        corrected_data = corrector.correct(raw_transcript)
+        sentence = corrected_data[0]['sequence']
+        print("DeepCorrect ends!")
+        return sentence
+            
+
     # Receive message from WebSocket
     async def receive(self, text_data):
-        data = json.loads(text_data)
-        raw_transcript = data['raw-transcript']
-        transcript = data['transcript']
 
-        summary = await self.commands[data['command']](self, data)
-        # print(summary)
-        # print(raw_transcript)
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'transcript': transcript,
-                'summary':summary
-            }
-        )
+        data = json.loads(text_data)
+
+        if data['command'] == 'fetch_meeting_info':
+            fetched_data = await self.commands[data['command']](self, data)
+            transcript = fetched_data['transcript']
+            summary = fetched_data['summary']
+            if transcript != '': 
+                await self.send_content_data(transcript, summary)            
+
+        elif data['command'] == 'save_meeting_info':
+            final_transcript = data['final_transcript']
+            final_summary = data['final_summary']
+            await self.commands[data['command']](self, final_transcript, final_summary)
+
+        else :
+            raw_transcript = data['raw-transcript']
+            sentence = await self.addPunct(raw_transcript)
+            message = "<b>@" + data['author'] + ": </b>" + sentence + "<br />"   
+
+            summary = await self.commands[data['command']](self, data)
+        
+            # Send message to room group
+            await self.send_content_data(message, summary)
 
     # Receive message from room group
     async def chat_message(self, event):

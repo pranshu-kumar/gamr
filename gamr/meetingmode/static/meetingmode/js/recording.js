@@ -29,12 +29,24 @@ const chatSocket = new WebSocket(
     + '/'
 );
 
+chatSocket.onopen = function(e) {
+    chatSocket.send(JSON.stringify({
+        'command': 'fetch_meeting_info'
+    }));
+
+}
+
 chatSocket.onmessage = function(e) {
-    //console.log('message', e);
     const data = JSON.parse(e.data);
     summary_field.innerHTML = '';
     console.log(e.data);
+    transcript.innerHTML += data.transcript;
     summary_field.innerHTML += data.summary;
+    chatSocket.send(JSON.stringify({
+        'command': 'save_meeting_info',
+        'final_transcript':transcript.innerHTML,
+        'final_summary':summary_field.innerHTML
+    }));
     
 };
 
@@ -69,7 +81,14 @@ stop.addEventListener('click', function(){
     start.disabled = true;
     
     recognition.stop();
-    final_transcript = '';
+
+    console.log(final_transcript);
+    chatSocket.send(JSON.stringify({
+        'command': 'save_meeting_info',
+        'final_transcript':transcript.innerHTML,
+        'final_summary':summary_field.innerHTML
+    }));
+
 })
 
 var final_transcript = '';
@@ -79,19 +98,21 @@ recognition.onresult = function(event) {
     {
         if(event.results[i].isFinal) {
             final_transcript = event.results[i][0].transcript;
-            console.log(final_transcript);
-            const message = '<b>'+'@' + author + ': ' + '</b>' + final_transcript + '\n';
-            transcript.innerHTML += message;
-            transcript.innerHTML += '<br />';
+            // console.log(final_transcript);
+            // const message = '<b>'+'@' + author + ': ' + '</b>' + final_transcript + '\n';
+            // transcript.innerHTML += message;
+            // transcript.innerHTML += '<br />';
             //console.log(final_transcript);
             // transcript.innerHTML += final_transcript;
+            // console.log(chatSocket.readyState)
             chatSocket.send(JSON.stringify({
-                'transcript': message,
                 'raw-transcript':final_transcript,
-                'command': 'summarize_transcript'
+                'command': 'summarize_transcript',
+                'author':author
             }));
         } else {
             interim_transcript += event.results[i][0].transcript;
+            console.log(interim_transcript);
         }
     }
 }
