@@ -17,6 +17,8 @@ from nltk.tokenize import sent_tokenize
 from django.contrib.auth import get_user_model
 import os
 
+from googletrans import Translator
+
 # Run the following command in terminal to connect to redis channel
 # docker run -p 6379:6379 -d redis:5 
 
@@ -44,14 +46,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['meeting_code']
         self.room_group_name = 'meeting_%s' % self.room_name
-        f = open('/home/pranshu/GAMR/gamr/meetingmode/transcript.txt', 'a')
-        f.truncate(0)
-        f.close()
-
-        f = open('/home/pranshu/GAMR/gamr/meetingmode/summary.txt', 'a')
-        f.truncate(0)
-        f.close()
-
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -70,34 +64,38 @@ class ChatConsumer(AsyncWebsocketConsumer):
             meeting_info = MeetingInfo.objects.get(meeting=meeting)
             transcript = meeting_info.transcript
             summary = meeting_info.summary
+            translated_summary = meeting_info.translated_summary
+            
             return {
                 'transcript':transcript,
-                'summary':summary
+                'summary':summary,
+                'translated_summary':translated_summary
             }
         except:
-            print("Meeting Transcript object not created yet!")
+            print("Meeting Transcript object not created yet! Creating object")
+            
+            f = open('/home/pranshu/GAMR/gamr/meetingmode/transcript.txt', 'a')
+            f.truncate(0)
+            f.close()
+
+            f = open('/home/pranshu/GAMR/gamr/meetingmode/summary.txt','a')
+            f.truncate(0)
+            f.close()
+            
             MeetingInfo.objects.create(meeting=meeting)
             meeting_info = MeetingInfo.objects.get(meeting=meeting)
             transcript = meeting_info.transcript
             summary = meeting_info.summary
+            translated_summary = meeting_info.translated_summary
+            print(translated_summary)
             return {
                 'transcript':transcript,
-                'summary':summary
+                'summary':summary,
+                'translated_summary':translated_summary
             }
         
 
-    async def summarize_transcript(self, data):
-        transcript = data['raw-transcript']
-
-        # print('DataCorrect begins...')
-        # corrected_data = corrector.correct(transcript)
-        # sentence = corrected_data[0]['sequence']
-        # print(sentence)
-        # print('DataCorrect Ends!')
-
-        f = open('/home/pranshu/GAMR/gamr/meetingmode/transcript.txt', 'a')
-        f.write(transcript + '\n')
-        f.close()
+    async def summarize_transcript(self):
 
         # LexRank Begins
         def preprocess(filename):
@@ -139,22 +137,30 @@ class ChatConsumer(AsyncWebsocketConsumer):
         return final_summary
     
     @sync_to_async
-    def save_meeting_info(self, final_transcript, final_summary):
+    def save_meeting_info(self, final_transcript, final_summary, final_translated_summary):
         print('Saving Transcript...')
 
         meeting = Meeting.objects.get(meeting_code = self.room_name)
         meeting_info = MeetingInfo.objects.get(meeting=meeting)
         meeting_info.transcript = final_transcript
         meeting_info.summary = final_summary
+        meeting_info.translated_summary = final_translated_summary
         meeting_info.save()
 
         print('Transcript Saved!')
 
+    
+    @sync_to_async
+    def translate_summary(self, summary, lang):
+        translator = Translator()
+        translation = translator.translate(summary, dest=lang)
+        return translation.text
 
     commands = {
         'fetch_meeting_info':fetch_meeting_info,
         'summarize_transcript':summarize_transcript,
         'save_meeting_info':save_meeting_info,
+        'translate_summary': translate_summary
     }
 
     async def disconnect(self, close_code):
@@ -164,13 +170,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-    async def send_content_data(self, transcript, summary):
+    async def send_content_data(self, transcript, summary, translated_summary, command):
         await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'chat_message',
                     'transcript': transcript,
-                    'summary':summary
+                    'summary':summary,
+                    'translated_summary':translated_summary,
+                    'command':command
                 }
             )
 
@@ -191,30 +199,48 @@ class ChatConsumer(AsyncWebsocketConsumer):
             fetched_data = await self.commands[data['command']](self, data)
             transcript = fetched_data['transcript']
             summary = fetched_data['summary']
+            translated_summary = fetched_data['translated_summary']
             if transcript != '': 
-                await self.send_content_data(transcript, summary)            
+                await self.send_content_data(transcript, summary, translated_summary,'fetch')            
 
         elif data['command'] == 'save_meeting_info':
             final_transcript = data['final_transcript']
             final_summary = data['final_summary']
-            await self.commands[data['command']](self, final_transcript, final_summary)
+            final_translated_summary = data['final_translated_summary']
+            await self.commands[data['command']](self, final_transcript, final_summary, final_translated_summary)
+
+        elif data['command'] == 'translate_summary':
+            summary = data['final_summary']
+            lang = data['translate_to']
+            translated_summary = await self.translate_summary(summary, lang)
+
+            await self.send_content_data('', '',translated_summary,'translate')
 
         else :
             raw_transcript = data['raw-transcript']
             sentence = await self.addPunct(raw_transcript)
-            message = "<b>@" + data['author'] + ": </b>" + sentence + "<br />"   
 
-            summary = await self.commands[data['command']](self, data)
+            f = open('/home/pranshu/GAMR/gamr/meetingmode/transcript.txt', 'a')
+            f.write(sentence + '\n')
+            f.close()
+
+            message = "<b>@" + data['author'] + ": </b>" + sentence + "\r\n<br />"   
+
+            summary = await self.commands[data['command']](self)
         
             # Send message to room group
-            await self.send_content_data(message, summary)
+            await self.send_content_data(message, summary, '','summarize')
 
     # Receive message from room group
     async def chat_message(self, event):
         transcript = event['transcript']
         summary = event['summary']
+        command = event['command']
+        translated_summary = event['translated_summary']
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'transcript': transcript,
-            'summary':summary
+            'summary':summary,
+            'translated_summary':translated_summary,
+            'command':command
         }))

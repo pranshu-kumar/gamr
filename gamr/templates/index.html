@@ -56,7 +56,7 @@
                     <li><a class="smoothscroll" href="#features" title="Features">Features</a></li>
                     <li><a class="smoothscroll" href="#download" title="Get Started">Get Started</a></li>
                     <li><a href="{% url 'meeting:all' %}" title="Meeting">Meeting</a></li>
-                    <li><a class="smoothscroll" href="#" title="Study">Study</a></li>
+                    <li><a href="{% url 'study:dashboard' username=user.username %}" title="Study">Study</a></li>
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'accounts:logout' %}" title="Logout">Logout</a></li>
                     {% else %}

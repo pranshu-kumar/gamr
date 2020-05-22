@@ -7,6 +7,7 @@ from .views import (
     JoinMeeting,
     DashboardView,
     LeaveMeeting,
+    html_to_pdf_view
 )
 app_name = 'meetingmode'
 
@@ -17,4 +18,5 @@ urlpatterns = [
     path('dashboard/<slug>', DashboardView.as_view(), name='room'),
     path('leave-meeting/<slug>', LeaveMeeting.as_view(), name='leave'),
     path('leave-meeting/<slug>', LeaveMeeting.as_view(), name='leave'),
+    path('download/<slug>', html_to_pdf_view, name="download"),
 ]

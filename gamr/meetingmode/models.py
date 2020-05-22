@@ -28,6 +28,7 @@ class Meeting(models.Model):
 class MeetingInfo(models.Model):
     transcript = models.TextField()
     summary = models.TextField()
+    translated_summary = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     meeting = models.ForeignKey(Meeting, related_name='transcript_meeting', on_delete=models.CASCADE)
 

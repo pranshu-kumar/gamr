@@ -1,11 +1,17 @@
 from django.contrib import messages
 from django.shortcuts import render, HttpResponse, reverse
+from django.http import HttpResponse
+from django.template.loader import render_to_string
 from django.views.generic import (
     TemplateView,
     CreateView,
     ListView,
     RedirectView,
     DetailView)
+
+from weasyprint import HTML
+
+from django.core.files.storage import FileSystemStorage
 
 from django.urls import reverse_lazy
 
@@ -15,7 +21,9 @@ from django.contrib.auth import get_user_model
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Meeting, MeetingMember
+from .models import Meeting, MeetingMember, MeetingInfo
+
+from googletrans import Translator
 
 User = get_user_model()
 
@@ -74,3 +82,35 @@ class LeaveMeeting(LoginRequiredMixin, RedirectView):
                 "You have successfully left this meeting."
             )
         return super().get(request, *args, **kwargs)
+
+
+def html_to_pdf_view(request, **kwargs):
+    slug = kwargs.get('slug')
+    meeting = Meeting.objects.get(slug=slug)
+    meetingInfo = MeetingInfo.objects.get(meeting=meeting)
+    transcript = meetingInfo.transcript
+    translator = Translator()
+    translation = translator.translate(transcript, dest='hi')
+    translated_text = translation.text
+    translated_sentences = translated_text.split('\n')
+    sentences = transcript.split('\n')
+    paragraphs = {
+        'transcript':sentences,
+        'translated_transcript':translated_sentences,
+        'summary':meetingInfo.summary, 
+        'translated_summary':meetingInfo.translated_summary,
+        'description':meeting.description
+    }
+    html_string = render_to_string('meetingmode/pdf_template.html', paragraphs)
+
+    html = HTML(string=html_string)
+    html.write_pdf(target='/tmp/meeting_'+slug+'.pdf')
+    fs = FileSystemStorage('/tmp')
+    filename = 'meeting_'+slug+'.pdf'
+    with fs.open('meeting_'+slug+'.pdf') as pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="meeting.pdf"'
+        return response
+
+    return response
+

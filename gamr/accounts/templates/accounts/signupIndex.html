@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% load static %}
+{% load widget_tweaks %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>MAIO | Login Page</title>
+	<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'accounts/css/signupStyle.css' %}">
+
+</head>
+
+<body>
+	<div class="login-div">
+		<div class="logo"></div>
+		<div class="subtitle">BETA</div>
+		<div class="fields">
+			<div class="username">{{form.username}}</div>
+			<div class="email">{{form.email}}</div>
+			<div class="password">{{form.password1}}</div>
+			<div class="password">{{form.password1}}</div>
+		</div>
+		<div class="accounttype">
+			<div class="type">
+				<input type="checkbox" id="professional">
+				<label for="professional">Professional </label>
+			</div>
+			<div class="type">
+				<input type="checkbox" id="student">
+				<label for="student">Student </label>
+			</div>
+		</div>
+		<div class="warning">
+			<span>By clicking the Sign-Up button, you hereby agree to the <a href="#">Terms and Conditions.</a> , <a href="#">Data Policy</a> , <a href="#">Cookie Policy</a> . You may recieve emails from us.</span>
+		</div>
+		<button class="sign-in-button">Sign-Up</button>
+		<div class="link">
+			<a href="#">Already Have An Account?</a>
+		</div>
+	</div>
+
+</body>
+</html>

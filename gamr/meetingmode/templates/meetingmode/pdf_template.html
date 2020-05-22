@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Information</title>
+</head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<body>
+
+    <header>
+        <p>MAIO | Work smart. Play Hard.<p> 
+        <p>An GAMR Technology</p>
+        <hr> 
+    </header>
+<style>
+    body{
+        text-align: center;
+        font-family: Helvetica;
+    }
+    header{
+        color: darkgray;
+        text-align: center;
+        margin: 20px;
+    }
+</style>
+<div class="container">
+<div class="jumbotron">
+
+    <h1><b><u>Meeting Information</u></b></h1>
+    <p>{{description}}</p>
+
+    <h3><b>Meeting Summary</b></h3>
+    <p>{{summary}}</p>
+
+    <h3><b>Meeting Summary (Translated)</b></h3>
+    <p>{{translated_summary}}</p>
+    
+    <h3><b>Meeting Transcript</b></h3>
+    {% for sentence in transcript %}
+        {% if sentence != '' %}
+            <p>{{sentence}}</p>
+        {% else %}
+        {% endif %}
+    {% endfor %}
+
+    <h3><b>Meeting Transcript (Translated)</b></h3>
+    {% for sentence in translated_transcript %}
+        {% if sentence != '' %}
+            <p>{{sentence}}</p>
+        {% else %}
+        {% endif %}
+    {% endfor %}
+
+  
+</div>
+</div>
+    
+</body>
+<script>
+    document.querySelector('#p').innerHTML = "<b>Pranshu</b>"
+</script>
+</html>

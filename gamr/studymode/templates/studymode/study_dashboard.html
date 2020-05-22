@@ -1,0 +1,152 @@
+{% extends 'studymode/study_base.html' %}
+{% load static %}
+{% block content %}
+	<div class="maincontent">
+		<div class="dashboardheader">
+			<div class="dashboardtitle">
+				<span>Main Dashboard</span>
+			</div>
+
+			<div class="dashboardwelcome">
+				<span>Welcome back, <B>{{user.username}}</B></span>
+			</div>
+
+			<div class="prevdashboards">
+				<span>You have <B>0</B> previous dashboards</span>
+			</div>
+
+			<div class="remainingtasks">
+				<span>You have <B>0</B> tasks remaining today</span>
+			</div>
+
+			<div class="usericon">
+				<img src="{% static 'studymode/media/User.png' %}" width="50px" height="50px">
+			</div>
+
+			<div class="loaddashboard">
+				<a href="#"><span>Load Dashboard</span></a>
+				<img src="{% static 'studymode/media/Load.png' %}" width="25px" height="25px">
+			</div>
+
+			<div class="savedashboard">
+				<a href="#"><span>Save Dashboard</span></a>
+				<img src="{% static 'studymode/media/save.png' %}" width="25px" height="25px">
+			</div>
+
+			<div class="cleardashboard">
+				<a href="#"><span>Clear Dashboard</span></a>
+				<img src="{% static 'studymode/media/clear.png' %}" width="25px" height="25px">
+			</div>
+
+			<div class="addResource">
+				<a href="#"><span>Add Resource</span></a>
+				<img src="{% static 'studymode/media/plus.png' %}" width="25px" height="25px">
+			</div>
+
+		</div>
+		<div class="textbox">
+			<div class="textheader">
+				<span>T</span>
+				<p>Study</p>
+			</div>
+			{{ user.username|json_script:"username" }}
+			<textarea oninput="summarize(this.value);" id="pasted-text" class="textboxarea" placeholder="Paste the piece of text that you want to analyse and study quickly over here. We will help you study whatever you put here much faster than you normally would."></textarea>
+		</div>
+
+		<div class="summarybox">
+			<div class="summaryheader">
+				<span>S</span>
+				<p>Summary</p>
+			</div>
+			
+			<textarea  readonly="" id="summary-text" class="summaryboxarea" placeholder="A brief but detailed summary of the text that you have provided would be generated. This summary would be quite concise compared to the original text and would be of great help to you."></textarea>
+		</div>
+		<div class="statbox">
+			<div class="totalwords">
+				<span class="totalwordslength">Text Length</span>
+				<span class="totalwordsnumber" id="lentext">0</span>
+				<span class="words"> WORDS</span>
+			</div>
+
+			<div class="summarywords">
+				<span class="totalwordslength">Summary Length</span>
+				<span class="totalwordsnumber" id="lensummary">0</span>
+				<span class="words"> WORDS</span>
+			</div>
+
+			<div class="namedentities">
+				<span class="totalwordslength">Named Entities</span>
+				<span class="totalwordsnumber">0</span>
+				<span class="words"> ENTITIES</span>
+			</div>
+
+			<div class="keywords">
+				<span class="totalwordslength">Keyword Number</span>
+				<span class="totalwordsnumber">0</span>
+				<span class="words"> WORDS</span>
+			</div>
+
+		</div>
+
+		<div class="resourcebox1">
+			<div class="resourceheader">
+				<span>R</span>
+				<p>Resource</p>
+			</div>
+			
+			<div class="resourcecontent">
+				<p>Brief introduction to the resource that has been scraped from the web. It could either be a website or a video. This resource has been selected based on it's popularity in the given search engine.</p>
+			</div>
+		</div>
+
+		<div class="resourcebox2">
+			<div class="resourceheader">
+				<span>R</span>
+				<p>Resource</p>
+			</div>
+			
+			<div class="resourcecontent">
+				<p>Brief introduction to the resource that has been scraped from the web. It could either be a website or a video. This resource has been selected based on it's popularity in the given search engine.</p>
+			</div>
+		</div>
+
+		<div class="resourcebox3">
+			<div class="resourceheader">
+				<span>R</span>
+				<p>Resource</p>
+			</div>
+			
+			<div class="resourcecontent">
+				<p>Brief introduction to the resource that has been scraped from the web. It could either be a website or a video. This resource has been selected based on it's popularity in the given search engine.</p>
+			</div>
+		</div>
+
+		<div class="resourcebox4">
+			<div class="resourceheader">
+				<span>R</span>
+				<p>Resource</p>
+			</div>
+			
+			<div class="resourcecontent">
+				<p>Brief introduction to the resource that has been scraped from the web. It could either be a website or a video. This resource has been selected based on it's popularity in the given search engine.</p>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="notesbox">
+		<div class="notesHeader">
+			<div class="title">
+				<span>Notes</span>
+			</div>
+			<div class="topic">
+				<input type="text" class="heading" placeholder="Note Title">
+				<input type="text" class="subheading" placeholder="Sub-Heading">
+			</div>
+			<div class="expand">
+				<img src="{% static 'studymode/media/Expand.png' %}" width="16px" height="16px">
+			</div>	
+		</div>
+	</div>
+	<script src="{% static 'studymode/js/study.js' %}"></script>
+{% endblock content %}

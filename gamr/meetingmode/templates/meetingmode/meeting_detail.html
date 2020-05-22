@@ -80,7 +80,7 @@
       <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top " id="navigation-example">
         <div class="container-fluid">
           <div class="navbar-wrapper">
-            <a class="navbar-brand" href="javascript:void(0)">{{meeting.meeting_name}}</a>
+            <a class="navbar-item" href="{% url 'meeting:download' slug=meeting.slug %}">Download</a>
             <a class="navbar-item" href="{% url 'meeting:leave' slug=meeting.slug %}">Leave Meeting</a>            
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation" data-target="#navigation-example">
@@ -205,74 +205,39 @@
 
           </div>
           <div class="row">
-            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-              <div class="card card-stats">
-                <div class="card-header card-header-warning card-header-icon">
-                  <div class="card-icon">
-                    <i class="material-icons">content_copy</i>
-                  </div>
-                  <p class="card-category">Meeting Participants</p>
-                  <h3 class="card-title">{{meeting.members.count}}
-                  </h3>
+
+            <div class="col-xl-4 col-lg-12">
+              <div class="card card-chart">
+                <div class="transcript">
+                  <h4 class="card-title">Translated Notes</h4>
+                  <p class="card-category">We will summarise the notes for you in the language you want!</p>
+                </div>
+                <div class="transcriptbox">
+                  {{ meeting.meeting_code|json_script:"meeting-code" }}
+                  <p id="summary-text">
+                 </p>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
-                    <i class="material-icons text-warning">warning</i>
-                    <a href="#pablo" class="warning-link">Be careful while sharing important information</a>
+                    <div class="dropdown">
+                      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Translate to
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" id="hi" onclick="translateTo(this.id)"  href="#">Hindi</a>
+                        <a class="dropdown-item" onclick="translateTo(this.id)" id="fr" href="#">French</a>
+                        <a class="dropdown-item" onclick="translateTo(this.id)" id="de" href="#">German</a>
+                        <a class="dropdown-item" onclick="translateTo(this.id)" id="ja" href="#">Japanese</a>
+                        <a class="dropdown-item" onclick="translateTo(this.id)" id="ru" href="#">Russian</a>
+                        <a class="dropdown-item" onclick="translateTo(this.id)" id="nl" href="#">Dutch</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-
-
-
-
-
-
-          <div class="row">
-            <div class="col-lg-4.5 col-md-12">
-              <div class="card">
-                <div class="card-header card-header-primary">
-                  <h4 class="card-title">Scheduled Meetings</h4>
-                  <p class="card-category">Your remaining meetings for the day.</p>
-                </div>
-
-                <div class="schedule">
-                  <table class="table table-hover">
-                    <thead class="text-warning">
-                      <th>Index</th>
-                      <th>Meeting with</th>
-                      <th></th>
-                      <th></th>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Meeting with James Bond regarding new mission</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Meeting with Bruce Wayne regarding some new threats in Gotham</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Meeting with Lionel Messi regarding his future at Barcelona</td>
-                      </tr>
-                      <tr>
-                        <td>4</td>
-                        <td>Meeting with Tony Stark regarding his future at Marvel</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-
-
-
-
-            <div class="col-lg-4.5 col-md-12">
+          
+            <div class="col-xl-8 col-lg-12">
               <div class="card">
                 <div class="card-header card-header-tabs card-header-warning">
                   <div class="nav-tabs-navigation">
@@ -286,28 +251,7 @@
                   <div class="tab-content">
                     <div class="tab-pane active" id="profile">
                       <table class="table">
-                        <tbody>
-                          <tr>
-                            <td>
-                              <div class="form-check">
-                                <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="" checked>
-                                  <span class="form-check-sign">
-                                    <span class="check"></span>
-                                  </span>
-                                </label>
-                              </div>
-                            </td>
-                            <td>Complete Meeting Mode and make it a seamless application ready for use</td>
-                            <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-white btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-white btn-link btn-sm">
-                                <i class="material-icons">close</i>
-                              </button>
-                            </td>
-                          </tr>
+                        <tbody id="tbody">
                           <tr>
                             <td>
                               <div class="form-check">
@@ -319,66 +263,22 @@
                                 </label>
                               </div>
                             </td>
-                            <td>Complete Study Mode and make it a seamless, integrated application ready for proper use</td>
+                            <td><input type="text" id="task0-text" class="form-control"></td>
                             <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-white btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-white btn-link btn-sm">
-                                <i class="material-icons">close</i>
+                              <button id = "add0-task" onclick="addTasktoDatabase()" type="submit" title="Add Task" class="btn btn-white btn-link btn-lg">
+                                <i class="material-icons">add</i>
                               </button>
                             </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div class="form-check">
-                                <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="">
-                                  <span class="form-check-sign">
-                                    <span class="check"></span>
-                                  </span>
-                                </label>
-                              </div>
-                            </td>
-                            <td>Make it a seamless application
-                            </td>
-                            <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-white btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-white btn-link btn-sm">
-                                <i class="material-icons">close</i>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div class="form-check">
-                                <label class="form-check-label">
-                                  <input class="form-check-input" type="checkbox" value="" checked>
-                                  <span class="form-check-sign">
-                                    <span class="check"></span>
-                                  </span>
-                                </label>
-                              </div>
-                            </td>
-                            <td>Debugging and testing</td>
-                            <td class="td-actions text-right">
-                              <button type="button" rel="tooltip" title="Edit Task" class="btn btn-white btn-link btn-sm">
-                                <i class="material-icons">edit</i>
-                              </button>
-                              <button type="button" rel="tooltip" title="Remove" class="btn btn-white btn-link btn-sm">
-                                <i class="material-icons">close</i>
-                              </button>
-                            </td>
+                            </form>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
+                
               </div>
-            </div>
+              
           </div>
         </div>
       </div>
@@ -610,7 +510,7 @@
 
     });
   </script>
-  <script src="{% static 'meetingmode/js/recording.js' %}"></script>
+  <script src="{% static 'meetingmode/js/meeting.js' %}"></script>
 </body>
 
 </html>

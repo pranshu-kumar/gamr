@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'bootstrap3',
     'channels',
     'meetingmode',
+    'studymode',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -78,6 +80,8 @@ CHANNEL_LAYERS = {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
             "hosts": [('127.0.0.1', 6379)],
+            'capacity': 5000,
+            'expiry': 5,
         },
     },
 }

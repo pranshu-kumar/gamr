@@ -24,4 +24,5 @@ urlpatterns = [
     path('', HomePage.as_view(), name="home"),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('meeting/', include('meetingmode.urls', namespace='meeting')),
+    path('study/', include('studymode.urls', namespace='study'))
 ]

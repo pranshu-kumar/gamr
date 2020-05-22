@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale = 1.0" >
+	<title>MAIO | Study Mode</title>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,400;0,700;1,500&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700&display=swap" rel="stylesheet">
+
+	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="{% static 'studymode/css/studymodeStyle.css' %}">
+</head>
+<body>
+	<div class="sidebar">
+		<div class="Logo">
+			<img src="{% static 'studymode/media/Logo.png' %}" width="100px" height="53px">
+			<p><span>BETA</span></p>
+			<div class="sidemenu">
+				<ul>
+					<li class="active">DASHBOARD</li>
+					<li>SETTINGS</li>
+					<li>ACCOUNT</li>
+					<li>HELP</li>
+					<li>ABOUT US</li>
+				</ul>
+			</div>
+		</div>
+    </div>
+    
+    {% block content %}
+    
+    {% endblock content %}
+
+</body>
+</html>

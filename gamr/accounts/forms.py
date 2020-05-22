@@ -10,3 +10,7 @@ class UserCreateForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields["username"].label = "Display Name"
         self.fields["email"].label = "Email Address"
+        self.fields['username'].widget.attrs['class'] = 'user-input'
+        self.fields['password1'].widget.attrs['class'] = 'password-input'
+        self.fields['password2'].widget.attrs['class'] = 'password-input'
+        self.fields['email'].widget.attrs['class'] = 'email-input'
