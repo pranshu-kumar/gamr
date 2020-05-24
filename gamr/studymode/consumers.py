@@ -7,6 +7,9 @@ from lexrank.mappings.stopwords import STOPWORDS
 from path import Path
 from nltk.tokenize import sent_tokenize, RegexpTokenizer
 
+from .search_resources import final_resources 
+from .unfurling import OPG
+
 # Run the following command in terminal to connect to redis channel
 # docker run -p 6379:6379 -d redis:5 
 
@@ -70,38 +73,85 @@ class StudyConsumer(AsyncWebsocketConsumer):
         return final_summary, len_text, len_summary
         #LexRank Ends
 
+    
+    async def add_resources(self, text):
+        
+        print("fetching resources...")
+        resources = final_resources(text)
+        print("fetching resources done!")
+
+        print("unfurling...")
+        all_resources = []
+        for resource in resources:
+            resource_dir = OPG(resource)
+            if not("url" in resource_dir):
+                resource_dir.__setitem__("url", resource)
+            all_resources.append(resource_dir)
+        print("Unfurling done!")
+        
+        return(all_resources)
+
 
     commands = {
         'process_pasted_text':process_pasted_text,
+        'add_resources':add_resources
     }
 
     # Receive message from WebSocket
     async def receive(self, text_data):
         data = json.loads(text_data)
-        pasted_text = data['pasted_text']
 
-        if data['commands'] == 'process_pasted_text':
+        if data['command'] == 'process_pasted_text':
+            pasted_text = data['pasted_text']
             summary,len_text, len_summary = await self.process_pasted_text(pasted_text)
+            
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'command':'send_summary',
+                    'summary': summary,
+                    'len_text':len_text,
+                    'len_summary':len_summary
+                }
+            )
         
+        elif data['command'] == 'add_resources':
+            text = data['pasted_text']
+            all_resources = await self.add_resources(text)
+        
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'command':'send_resources',
+                    'all_resources': all_resources
+                }
+            )
         # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'summary': summary,
-                'len_text':len_text,
-                'len_summary':len_summary
-            }
-        )
+      
 
     # Receive message from room group
     async def chat_message(self, event):
-        summary = event['summary']
-        len_text = event['len_text']
-        len_summary = event['len_summary']
+        
+        if event['command'] == 'send_summary':
+            summary = event['summary']
+            len_text = event['len_text']
+            len_summary = event['len_summary']
+
+            await self.send(text_data=json.dumps({
+                'command':'show_summary',
+                'summary': summary,
+                'len_text':len_text,
+                'len_summary':len_summary
+            }))
+
+        elif event['command'] == 'send_resources':
+            all_resources = event['all_resources']
+
+            await self.send(text_data=json.dumps({
+                'command':'show_resources',
+                'all_resources':all_resources
+            }))
         # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            'summary': summary,
-            'len_text':len_text,
-            'len_summary':len_summary
-        }))
+     

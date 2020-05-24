@@ -167,7 +167,7 @@ chatSocket.onmessage = function(e) {
     else if (data.command == 'translate'){
         console.log(data.translated_summary)
         if (data.translated_summary != ''){
-            document.querySelector('#summary-text'meetingmode).innerHTML = data.translated_summary;
+            document.querySelector('#summary-text').innerHTML = data.translated_summary;
         }    
     }
     else if (data.command == 'fetch'){

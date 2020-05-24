@@ -19,6 +19,10 @@ html, body {
 	background: var(--background-main);
 }
 
+h3{
+	color: white;
+}
+
 .sidebar {
 	display: flex;
 	flex-direction: row;
@@ -129,8 +133,8 @@ html, body {
 
 .notesbox .notesHeader .title {
 	position: absolute;
-	top: 7%;
-	left: 7%;
+	top: 5px;
+	left: 23px;
 	font-family: 'Cairo', sans-serif;
 	color: var(--text-primary);
 	font-size: 14px;
@@ -139,8 +143,8 @@ html, body {
 
 .notesbox .notesHeader .topic .heading {
 	position: absolute;
-	top: 20%;
-	left: 7%;
+	top: 17px;
+	left: 23px;
 	border: none;
 	font-size: 22px;
 	font-weight: 900;
@@ -152,8 +156,8 @@ html, body {
 
 .notesbox .notesHeader .topic .subheading {
 	position: absolute;
-	top: 55%;
-	left: 7%;
+	top: 47px;
+	left: 24px;
 	border: none;
 	font-size: 14px;
 	font-weight: 900;
@@ -171,8 +175,8 @@ html, body {
 
 .notesbox .notesHeader .expand {
 	position: absolute;
-	top: 15%;
-	left: 88%;
+	top: 12px;
+	right: 10px;
 	cursor: pointer;
 	padding: 7px;
 	display: flex;
@@ -186,11 +190,11 @@ html, body {
 	border-radius: 50%;
 }
 
-.maincontent .dashboardwelcome {
+.maincontent .dashboardwelcomemain {
 	position: absolute;
 	top: 12%;
 	left: 3%;
-	height: 90px;
+	height: 15%;
 	width: 40%;
 	background: var(--quarternary);
 	border-radius: 10px;
@@ -198,6 +202,8 @@ html, body {
 
 .maincontent .dashboardwelcome {
 	position: absolute;
+	top: 0;
+	left: 3px;
 	padding-top: 3px;
 	padding-left: 7px;
 	padding-bottom: 7px;
@@ -207,13 +213,13 @@ html, body {
 	font-family: 'Cairo', sans-serif;
 	font-weight: 600;
 	font-size: 22px;
-
 }
+
 
 .maincontent .prevdashboards {
 	position: absolute;
-	top: 18%;
-	left: 4.35%;
+	top: 30px;
+	left: 16px;
 	color: var(--text-primary);
 	font-family: 'Cairo', sans-serif;
 	font-weight: 600;
@@ -223,8 +229,8 @@ html, body {
 
 .maincontent .remainingtasks {
 	position: absolute;
-	top: 21.5%;
-	left: 4.35%;
+	top: 47px;
+	left: 17px;
 	color: var(--text-primary);
 	font-family: 'Cairo', sans-serif;
 	font-weight: 600;
@@ -234,8 +240,8 @@ html, body {
 
 .usericon {
 	position: absolute;
-	top: 14%;
-	left: 34%;
+	top: 10px;
+	left: 270px;
 	padding: 7px;
 	transition: 1s ease;
 	background-color: var(--quarternary);
@@ -256,7 +262,7 @@ html, body {
 	top: 30%;
 	left: 3%;
 	width: 50%;
-	height: 265px;
+	height: 46%;
 	background: var(--primary);
 	border-radius: 20px;
 }
@@ -291,7 +297,7 @@ html, body {
 
 .textbox .textheader p {
 	position: absolute;
-	left: 11%;
+	left: 42px;
 	top: -22px;
 	font-family: 'Cairo', sans-serif;
 	font-weight: 600;
@@ -310,7 +316,7 @@ html, body {
 	margin-right: 5px;
 	margin-left: 5px;
 	min-width: 98%;
-	min-height: 210px;
+	min-height: 79%;
 	resize: none;
 	background: var(--primary);
 	border: solid 0.5px var(--background-main);
@@ -326,7 +332,7 @@ html, body {
 	top: 30%;
 	left: 53.75%;
 	width: 38.5%;
-	height: 265px;
+	height: 46%;
 	background: var(--primary);
 	border-radius: 20px;
 }
@@ -361,7 +367,7 @@ html, body {
 
 .summarybox .summaryheader p {
 	position: absolute;
-	left: 14%;
+	left: 42px;
 	top: -22px;
 	font-family: 'Cairo', sans-serif;
 	font-weight: 600;
@@ -380,7 +386,7 @@ html, body {
 	margin-right: 6px;
 	margin-left: 4px;
 	min-width: 98%;
-	min-height: 210px;
+	min-height: 79%;
 	resize: none;
 	background: var(--primary);
 	border: solid 0.5px var(--background-main);
@@ -397,11 +403,16 @@ html, body {
 	position: absolute;
 	top: 80%;
 	left: 3%;
+	width: 89%;
+	height: 15%;
 }
 
 .statbox .totalwords {
+	position: absolute;
+	top: 0;
+	left: 0;
 	height: 100px;
-	width: 175px;
+	width: 22%;
 	background: var(--tertiary);
 	border-radius: 10px;
 }
@@ -436,9 +447,10 @@ html, body {
 
 .statbox .summarywords {
 	position: absolute;
-	left: 115%;
+	top: 0;
+	left: 25%;
 	height: 100px;
-	width: 175px;
+	width: 22%;
 	background: var(--quarternary);
 	border-radius: 10px;
 }
@@ -474,9 +486,9 @@ html, body {
 
 .statbox .namedentities {
 	position: absolute;
-	left: 230%;
+	left: 50%;
 	height: 100px;
-	width: 175px;
+	width: 22%;
 	background: var(--tertiary);
 	border-radius: 10px;
 }
@@ -512,9 +524,10 @@ html, body {
 
 .statbox .keywords {
 	position: absolute;
-	left: 345%;
+	top: 0;
+	left: 75%;
 	height: 100px;
-	width: 175px;
+	width: 22%;
 	background: var(--quarternary);
 	border-radius: 10px;
 
@@ -548,14 +561,22 @@ html, body {
 	font-weight: 900;
 }
 
-
-.loaddashboard {
+.buttons {
 	position: absolute;
 	top: 12%;
 	left: 50%;
+	height: 85px;
+	width: 42%;
+}
+
+
+.loaddashboard {
+	position: absolute;
+	top: 0;
+	left: 0;
 	background: var(--tertiary);
 	height: 35px;
-	width: 170px;
+	width: 45%;
 	border-radius: 15px;
 	cursor: pointer;
 }
@@ -585,11 +606,11 @@ html, body {
 
 .savedashboard {
 	position: absolute;
-	top: 20%;
-	left: 50%;
+	top: 42px;
+	left: 0;
 	background: var(--tertiary);
 	height: 35px;
-	width: 170px;
+	width: 45%;
 	border-radius: 15px;
 	cursor: pointer;
 }
@@ -619,13 +640,14 @@ html, body {
 
 .cleardashboard {
 	position: absolute;
-	top: 20%;
-	left: 71%;
+	top: 0;
+	left: 185px;
 	background: var(--quarternary);
 	height: 35px;
-	width: 170px;
+	width: 45%;
 	border-radius: 15px;
 	cursor: pointer;
+	margin-left: 10px;
 }
 
 .cleardashboard span {
@@ -653,13 +675,14 @@ html, body {
 
 .addResource {
 	position: absolute;
-	top: 12%;
-	left: 71%;
+	top: 42px;
+	left: 185px;
 	background: var(--quarternary);
 	height: 35px;
-	width: 170px;
+	width: 45%;
 	border-radius: 15px;
 	cursor: pointer;
+	margin-left: 10px;
 }
 
 .addResource span {
@@ -686,108 +709,222 @@ html, body {
 }
 
 
-.resourcebox1 {
+.Resourcebox {
 	position: absolute;
-	top: 102%;
-	left: 4%;
-	width: 42%;
-	min-height: 265px; 
-	background: var(--primary);
-	border-radius: 10px;
-	margin-bottom: 15px;
+	top: 100%;
+	left: 3%;
+	width: 700px;
+	margin-bottom: 20px;
+}
+
+.Resourcebox ul {
+	list-style: none;
+}
+
+.Resourcebox ul li {
+	margin-bottom: 20px;
 }
 
 
-.resourcebox2 {
-	position: absolute;
-	top: 102%;
-	left: 48%;
-	width: 42%;
-	min-height: 265px; 
-	background: var(--primary);
-	border-radius: 10px;
-	margin-bottom: 15px;
-}
-
-.resourcebox3 {
-	position: absolute;
-	top: 152%;
-	left: 4%;
-	width: 42%;
-	min-height: 265px; 
-	background: var(--primary);
-	border-radius: 10px;
-	margin-bottom: 15px;
-}
-
-.resourcebox4 {
-	position: absolute;
-	top: 152%;
-	left: 48%;
-	width: 42%;
-	min-height: 265px; 
-	background: var(--primary);
-	border-radius: 10px;
-	margin-bottom: 15px;
-}
-
-
-.resourceheader {
+.Resourcebox ul li .resources1 {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
+	border: solid 2px var(--text-secondary);
+	background-color: transparent;
 	border-radius: 10px;
-}
+	height: 300px;
 
-.resourceheader span {
+	margin-bottom: 20px;
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
 	align-items: center;
-	position: absolute;
-	padding: 8px;
-	margin-top: 5px;
-	margin-left: 7px;
+	justify-content: center;
 	color: var(--text-primary);
-	background-color: var(--quarternary);
-	width: 30px;
-	height: 30px;
-	border-radius: 50%;
-	transition: 1s ease;
 }
 
-.resourceheader span:hover {
-	transform: rotate(180deg);
-	cursor: pointer;
-}
-
-.resourceheader p {
+.Resourcebox ul li .resources2 {
 	position: absolute;
-	left: 14%;
-	top: -22px;
+	top: 375px;
+	left: 0;
+	width: 100%;
+	border: solid 2px var(--text-secondary);
+	border-radius: 10px;
+	height: 300px;
+
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-primary);
+}
+
+.Resourcebox ul li .resources3 {
+	position: absolute;
+	top: 750px;
+	left: 0;
+	width: 100%;
+	border: solid 2px var(--text-secondary);
+	border-radius: 10px;
+	height: 300px;
+
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-primary);
+}
+
+.Resourcebox ul li .resources4 {
+	position: absolute;
+	top: 1125px;
+	left: 0;
+	width: 100%;
+	border: solid 2px var(--text-secondary);
+	border-radius: 10px;
+	height: 300px;
+
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-primary);
+}
+
+
+.Resourcebox ul li .resources5 {
+	position: absolute;
+	top: 1500px;
+	left: 0;
+	width: 100%;
+	border: solid 2px var(--text-secondary);
+	border-radius: 10px;
+	height: 300px;
+
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-primary);
+}
+
+.Resourcebox ul li .resources6 {
+	position: absolute;
+	top: 1875px;
+	left: 0;
+	width: 100%;
+	border: solid 2px var(--text-secondary);
+	border-radius: 10px;
+	height: 300px;
+
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-primary);
+}
+
+.resourceheader {
+	position: absolute;
+	top: 5px;
+	left: 15px;
 	font-family: 'Cairo', sans-serif;
-	font-weight: 600;
-	font-size: 22px;
-	color: var(--text-primary);
+	font-size: 900;
+	font-size: 25px;
+	margin-bottom: 10px;
+
 }
 
-.resourcecontent {
+.resourceheader span{
+	overflow: hidden;
+   	text-overflow: ellipsis;
+   	display: -webkit-box;
+   -webkit-line-clamp: 1; /* number of lines to show */
+   -webkit-box-orient: vertical;
+}
+
+
+.resourcesite {
 	position: absolute;
-	top: 12%;
-	padding-right: 2px;
-	padding-left: 2px;
-	margin: 3px;
-	margin-top: 10px;
-	border: solid 1px var(--background-main);
-	height: 210px;
+	top: 45px;
+	left: 40px;
+	font-family: 'Cairo', sans-serif;
+	font-size: 900;
+	font-size: 15px;
+	color: var(--text-secondary);
+	overflow-y: scroll;
+	width: 650px;
+}
+
+.resourceheader a{
+	overflow: hidden;
+   	text-overflow: ellipsis;
+   	display: -webkit-box;
+   -webkit-line-clamp: 1; /* number of lines to show */
+   -webkit-box-orient: vertical;
+}
+
+.resourcedescription {
+	position: absolute;
+	top: 75px;
+	left: 40px;
+	width: 650px;
+	height: 40px;
 	overflow-y: scroll;
 }
 
-.resourcecontent p {
-	color: var(--text-secondary);
-	
+.resourcedescription span
+{
+	padding-left: 5px;
+	padding-right: 5px;
+	display: -webkit-box;
+   -webkit-line-clamp: 3; /* number of lines to show */
+   -webkit-box-orient: vertical;
 }
 
+.resourceimage {
+	position: absolute;
+	left: 40px;
+	top: 135px;
+
+}
+
+.resourceimage img{
+	max-width: 300px;
+	max-height: 150px;
+	border-radius: 5px;
+	margin-left: 5px;
+}
+
+.box {
+	background: var(--text-secondary);
+	color: var(--primary);
+	position: absolute;
+	top: 50px;
+	left: 30px;
+	width: 4px;
+	height: 240px;
+	border-radius: 3px;
+}
+
+
+.resourcetag {
+	position: absolute;
+	top: 85%;
+	left: 85%;
+	padding: 5px;
+	width: fit-content;
+	border: solid 1px var(--quarternary);
+	background-color: var(--quarternary);
+	font-size: 12px;
+	border-radius: 8px;
+}
 
 ::-webkit-scrollbar {
 	width: 6px;
