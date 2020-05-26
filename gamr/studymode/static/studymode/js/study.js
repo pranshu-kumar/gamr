@@ -4,6 +4,10 @@ var summaryText = document.querySelector('#summary-text');
 var lentext = document.querySelector('#lentext');
 var lensummary = document.querySelector('#lensummary');
 var list = document.querySelector('#list');
+var parabox = document.querySelector('#para');
+var namedent = document.querySelector("#namedent");
+var blur = document.getElementById('blur');
+var loading = document.getElementById('loading');
 
 {/* <li>
         <div class="resources1">
@@ -20,6 +24,14 @@ var list = document.querySelector('#list');
     </li> */}
 
 function addResources(){
+
+    
+    blur.style.filter = "blur(2px)";
+    var childNodes = blur.getElementsByTagName('*');
+    for (var node of childNodes) {
+        node.disabled = true;
+    }
+    loading.style.visibility = "visible";
     studySocket.send(JSON.stringify({
         'command': 'add_resources',
         'pasted_text': pastedText.value
@@ -27,6 +39,13 @@ function addResources(){
 }
 
 function showResources(data, i){
+
+    blur.style.filter = "";
+    var childNodes = blur.getElementsByTagName('*');
+    for (var node of childNodes) {
+        node.disabled = false;
+    }
+    loading.style.visibility = "hidden";
     
     var li = document.createElement('li');
     var div1 = document.createElement('div');
@@ -101,7 +120,43 @@ function showResources(data, i){
 
 }
 
+function changeTextToPara(words, tokens){
 
+    var p = document.createElement('p');
+    var keywords_text = change_text(pastedText.value, words, tokens);
+    p.innerHTML = keywords_text;
+    parabox.appendChild(p);
+    pastedText.parentElement.removeChild(pastedText);
+}
+
+function change_text(text, words, tokens){
+    for(var i = 0; i < words.length; i = i+1){
+        var re = new RegExp(words[i], "");
+        text = text.replace(re, "<a class=\""+tokens[words[i]]+"\">"+words[i]+"</a>");
+    }
+    return text;
+}
+
+{/* <div class="word">
+		<a href="#" class="hover"><span>Keyword</span> 
+			<div class="hoverbox"> 
+				<div class="mainbox"> 
+					<a href="#"> 
+						<span class="entity"><B>ENTITY</B></span> 
+						<div class="line"></div> 
+						<a class="keyword">Keyword</a> 
+						<span class="description">Habitasse senectus varius nisi ultrices, torquent urna. Conubia pellentesque consequat taciti eleifend felis vestibulum duis gravida quam elit vivamus. Dui sociis penatibus aliquet est eleifend? Ullamcorper aenean sagittis consequat, sem nascetur litora. Conubia, cursus hendrerit placerat! Aliquam curabitur sapien luctus nisi. Proin lorem laoreet tortor ipsum nisl morbi sed. Neque risus fermentum tortor quis lacus posuere cubilia enim imperdiet facilisis elit? Parturient; volutpat mattis odio nostra amet montes tellus donec. Ut ultrices porta orci sit nulla lectus sociosqu. Venenatis varius turpis morbi justo lectus habitasse ultricies dui integer conubia at. Maecenas faucibus, primis vitae. Platea, platea etiam massa libero rutrum?</span>
+						<div class="line2"></div>
+						<a href="#" class="link" style="color:#7b5fe5">www.linkofthewebsite.com</a>
+						<div class="cross1"></div>
+						<div class="cross2"></div>
+					</a>
+				</div>
+			</div>
+		</a>
+	</div> */}
+
+// crossbutton on dialouge
 
 function summarize(val) {
     studySocket.send(JSON.stringify({
@@ -138,8 +193,11 @@ studySocket.onmessage = function(e) {
         lentext.innerHTML = data.len_text;
     } 
     else if(data.command == 'show_resources'){
-        console.log(data.all_resources);
+        var tokens = data.tokens;
         var resources_data = data.all_resources;
+        var l = Object.keys(tokens);
+        namedent.innerHTML = l.length;
+        changeTextToPara(Object.keys(tokens), tokens);
         if(list.childElementCount){
             var p = list.parentElement;
             list.parentElement.removeChild(list);

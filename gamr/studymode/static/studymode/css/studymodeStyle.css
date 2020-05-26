@@ -96,8 +96,6 @@ h3{
 	min-height: 100vh;
 	background: var(--background-main);
 	overflow-y: scroll;
-
-
 }
 
 .maincontent .dashboardtitle {
@@ -318,12 +316,74 @@ h3{
 	min-width: 98%;
 	min-height: 79%;
 	resize: none;
+	background: transparent;
+	border: solid 0.5px var(--background-main);
+	font-family: 'Cairo', sans-serif;
+	font-size: 12px;
+	line-height: 15px;
+	color: #ffffff;
+}
+
+.PERSON{
+	color: lightgreen;
+}
+
+.NORP{
+	color: lightblue;
+}
+
+.FAC{
+	color: lightcoral;
+}
+
+.GPE{
+	color: lightseagreen;
+}
+
+.ORG{
+	color: violet;
+}
+
+.PRODUCT{
+	color: lightsalmon;
+}
+
+.EVENT{
+	color: lightyellow;
+}
+
+.WORK_OF_ART{
+	color: lightsteelblue;
+}
+
+.LAW{
+	color: lightslategray;
+}
+
+.para-box{
+	display: flex;
+	position: absolute;
+	overflow-y: scroll;
+	top: 15%;
+	left: 0;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-right: 5px;
+	margin-left: 5px;
+	min-width: 98%;
+	min-height: 79%;
+	max-height: 164.49px;
+	resize: none;
 	background: var(--primary);
 	border: solid 0.5px var(--background-main);
 	font-family: 'Cairo', sans-serif;
 	font-size: 12px;
 	line-height: 15px;
 	color: #ffffff;
+}
+
+.para-box a{
+	text-decoration: none;
 }
 
 
@@ -685,6 +745,10 @@ h3{
 	margin-left: 10px;
 }
 
+.addResource:hover{
+	background-color: var(--tertiary);
+}
+
 .addResource span {
 	position: absolute;
 	top: 10%;
@@ -854,6 +918,7 @@ h3{
 	position: absolute;
 	top: 45px;
 	left: 40px;
+	height: 20px;
 	font-family: 'Cairo', sans-serif;
 	font-size: 900;
 	font-size: 15px;
@@ -924,6 +989,107 @@ h3{
 	background-color: var(--quarternary);
 	font-size: 12px;
 	border-radius: 8px;
+}
+.loader-container {
+	margin: 0;
+	padding: 0;
+	position: relative; 
+	left: 50%;
+	top: 50%;
+	transform: translateX(-65%) translateY(0%);
+	display: flex;
+	height: 80px;
+	width: 200px;
+	visibility: hidden;
+	border-radius: 20px;
+	box-shadow: #1b1e20 4px 4px 4px;
+	background-color: #7b5fe5;
+	justify-content: center;
+	align-items: center;
+	color: whitesmoke;
+}
+
+body{
+	background-color: #272b2f;
+}
+
+
+.loading {
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%,5%);
+	height: 60px;
+	display: flex;
+	align-items: center;
+}
+
+.obj {
+	width: 5px;
+	height: 40px;
+	background-color: white;
+	margin: 0 3px;
+	border-radius: 15px;
+	animation: load 1s infinite;
+}
+
+.obj:nth-child(2)
+{
+	animation-delay: 0.1s;
+}
+
+.obj:nth-child(3)
+{
+	animation-delay: 0.2s;
+}
+
+.obj:nth-child(4)
+{
+	animation-delay: 0.3s;
+}
+
+.obj:nth-child(5)
+{
+	animation-delay: 0.4s;
+}
+
+.obj:nth-child(6)
+{
+	animation-delay: 0.5s;
+}
+
+.obj:nth-child(7)
+{
+	animation-delay: 0.6s;
+}
+
+.obj:nth-child(8)
+{
+	animation-delay: 0.7s;
+}
+
+.obj:nth-child(9)
+{
+	animation-delay: 0.8s;
+}
+
+.obj:nth-child(10)
+{
+	animation-delay: 0.9s;
+}
+
+@keyframes load {
+
+	0% {
+		height: 0;
+	}
+
+	50% {
+		height: 40px;
+	}
+
+	100% {
+		height: 0;
+	}
 }
 
 ::-webkit-scrollbar {

@@ -16,16 +16,18 @@ def NER(test_sentences):
     tokens={}
     genText=test_sentences
     for ent in doc.ents:
-        tokens[ent.text]=ent.label_       
+        if ent.label_!= 'DATE' and ent.label_!= 'TIME' and ent.label_!= 'MONEY' and ent.label_!= 'QUANTITY' and ent.label_!= 'ORDINAL' and ent.label_!= 'CARDINAL':
+            tokens[ent.text]=ent.label_
+              
         
     for words in tokens:
         genText=genText.replace(words,'_'+tokens[words]+'_')
- 
-    spacy_result = {'genText':genText, 'tokens': tokens}
-    return spacy_result
-    
-    # displacy.serve(test_sentences,style='ent') #http://127.0.0.1:5000/
+
+    return tokens
+
+    #  #http://127.0.0.1:5000/
     # The above line is for visualising the NER
+    #NER("Pranshu is the best. He was born in 1999. Daniel Riccardo is a fool to switch from RedBull Racing to Renault.")
 
 def rake_rank(text):
   r = Rake()

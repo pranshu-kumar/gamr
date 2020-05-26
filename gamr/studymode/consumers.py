@@ -9,6 +9,7 @@ from nltk.tokenize import sent_tokenize, RegexpTokenizer
 
 from .search_resources import final_resources 
 from .unfurling import OPG
+from .keyword_ner_search_query import NER
 
 # Run the following command in terminal to connect to redis channel
 # docker run -p 6379:6379 -d redis:5 
@@ -88,8 +89,12 @@ class StudyConsumer(AsyncWebsocketConsumer):
                 resource_dir.__setitem__("url", resource)
             all_resources.append(resource_dir)
         print("Unfurling done!")
+
+        print("Spacy starts...")
+        tokens = dict(NER(text))
+        print("Spacy ends!")
         
-        return(all_resources)
+        return all_resources, tokens
 
 
     commands = {
@@ -118,14 +123,15 @@ class StudyConsumer(AsyncWebsocketConsumer):
         
         elif data['command'] == 'add_resources':
             text = data['pasted_text']
-            all_resources = await self.add_resources(text)
+            all_resources, tokens = await self.add_resources(text)
         
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'chat_message',
                     'command':'send_resources',
-                    'all_resources': all_resources
+                    'all_resources': all_resources,
+                    'tokens':tokens
                 }
             )
         # Send message to room group
@@ -148,10 +154,11 @@ class StudyConsumer(AsyncWebsocketConsumer):
 
         elif event['command'] == 'send_resources':
             all_resources = event['all_resources']
-
+            tokens = event['tokens']
             await self.send(text_data=json.dumps({
                 'command':'show_resources',
-                'all_resources':all_resources
+                'all_resources':all_resources,
+                'tokens':tokens
             }))
         # Send message to WebSocket
      

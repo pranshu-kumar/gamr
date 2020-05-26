@@ -1,7 +1,7 @@
 {% extends 'studymode/study_base.html' %}
 {% load static %}
 {% block content %}
-	<div class="maincontent">
+	<div class="maincontent" id="blur">
 		<div class="dashboardheader">
 			<div class="dashboardtitle">
 				<span>Main Dashboard</span>
@@ -51,8 +51,10 @@
 				<span>T</span>
 				<p>Study</p>
 			</div>
-			 {{ user.username|json_script:"username" }}
+			<div class="para-box" id="para"></div>
+			{{ user.username|json_script:"username" }}
 			<textarea oninput="summarize(this.value)" id="pasted-text" class="textboxarea" placeholder="Paste the piece of text that you want to analyse and study quickly over here. We will help you study whatever you put here much faster than you normally would."></textarea>
+			
 		</div>
 
 		<div class="summarybox">
@@ -60,8 +62,8 @@
 				<span>S</span>
 				<p>Summary</p>
 			</div>
-			
 			<textarea readonly="" id="summary-text" class="summaryboxarea" placeholder="A brief but detailed summary of the text that you have provided would be generated. This summary would be quite concise compared to the original text and would be of great help to you."></textarea>
+			
 		</div>
 		<div class="statbox">
 			<div class="totalwords">
@@ -78,7 +80,7 @@
 
 			<div class="namedentities">
 				<span class="totalwordslength">Named Entities</span>
-				<span class="totalwordsnumber">0</span>
+				<span id="namedent" class="totalwordsnumber">0</span>
 				<span class="words"> ENTITIES</span>
 			</div>
 
@@ -112,6 +114,22 @@
 			<div class="expand">
 				<img src="{% static 'studymode/media/Expand.png' %}" width="16px" height="16px">
 			</div>	
+		</div>
+	</div>
+
+	<div class="loader-container" id="loading">
+		<div class="loading">
+			<div class="obj"></div>
+			<div class="obj"></div>
+			<div class="obj"></div>
+			<div class="obj"></div>
+			<div class="obj"></div>
+			<div class="obj"></div>
+			<div class="obj"></div>
+			<div class="obj"></div>
+			<div class="obj"></div>
+			<div class="obj"></div>
+			<div class="obj"></div>
 		</div>
 	</div>
 	<script src="{% static 'studymode/js/study.js' %}"></script>
