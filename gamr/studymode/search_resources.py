@@ -26,8 +26,8 @@ def wiki_summary(text):
     search_query = wiki_list[-1].replace('_', ' ')
 
     summary = (wikipedia.WikipediaPage(title = search_query).summary)
+    print(summary)
     return(summary)
-
 ##############################################
 # def og_site(text):
 #     list_words = text.split()

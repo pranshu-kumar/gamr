@@ -50,5 +50,3 @@ def key_search_pair(text):
     return (pairs)
 
 
-
-

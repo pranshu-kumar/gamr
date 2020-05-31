@@ -8,7 +8,13 @@ var parabox = document.querySelector('#para');
 var namedent = document.querySelector("#namedent");
 var blur = document.getElementById('blur');
 var loading = document.getElementById('loading');
+var loadKeywords = document.getElementById('loadkeywords');
 
+var accordion = document.getElementById('accordion');
+
+function toggleclass(head){
+    head.classList.toggle('active');
+}
 {/* <li>
         <div class="resources1">
             <div class="resourceheader"><span>Abstractive Summarization of Dialogues </span></div>
@@ -117,7 +123,6 @@ function showResources(data, i){
     div1.appendChild(div7);
 
     list.appendChild(li);
-
 }
 
 function changeTextToPara(words, tokens){
@@ -137,32 +142,45 @@ function change_text(text, words, tokens){
     return text;
 }
 
-{/* <div class="word">
-		<a href="#" class="hover"><span>Keyword</span> 
-			<div class="hoverbox"> 
-				<div class="mainbox"> 
-					<a href="#"> 
-						<span class="entity"><B>ENTITY</B></span> 
-						<div class="line"></div> 
-						<a class="keyword">Keyword</a> 
-						<span class="description">Habitasse senectus varius nisi ultrices, torquent urna. Conubia pellentesque consequat taciti eleifend felis vestibulum duis gravida quam elit vivamus. Dui sociis penatibus aliquet est eleifend? Ullamcorper aenean sagittis consequat, sem nascetur litora. Conubia, cursus hendrerit placerat! Aliquam curabitur sapien luctus nisi. Proin lorem laoreet tortor ipsum nisl morbi sed. Neque risus fermentum tortor quis lacus posuere cubilia enim imperdiet facilisis elit? Parturient; volutpat mattis odio nostra amet montes tellus donec. Ut ultrices porta orci sit nulla lectus sociosqu. Venenatis varius turpis morbi justo lectus habitasse ultricies dui integer conubia at. Maecenas faucibus, primis vitae. Platea, platea etiam massa libero rutrum?</span>
-						<div class="line2"></div>
-						<a href="#" class="link" style="color:#7b5fe5">www.linkofthewebsite.com</a>
-						<div class="cross1"></div>
-						<div class="cross2"></div>
-					</a>
-				</div>
-			</div>
-		</a>
-	</div> */}
-
-// crossbutton on dialouge
 
 function summarize(val) {
     studySocket.send(JSON.stringify({
         'command': 'process_pasted_text',
         'pasted_text': val
     }));
+
+}
+
+{/* <!-- <div class="accordion-wrap">
+			<div class="accordion-header" onclick="toggleclass(this)">
+				Keyword 1
+			</div>
+			<div class="accordion-body">
+				<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ducimus nam explicabo iusto obcaecati id vero, impedit ipsum voluptates iste aperiam? Aspernatur, repellat eos tempore porro ipsa commodi ipsam ducimus libero.
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem corrupti eum error, voluptates distinctio iure maiores. Recusandae asperiores, officia quisquam id ea nemo, sed est itaque possimus, dicta aliquid expedita?
+				</p>
+			</div>
+		</div> --> */}
+
+function showKeywords(keyword, summary){
+    var div1 = document.createElement('div');
+    div1.className = "accordion-wrap";
+    
+    var div2 = document.createElement('div');
+    div2.className = "accordion-header";
+    div2.setAttribute('onclick', 'toggleclass(this)')
+    div2.innerHTML = keyword;
+    div1.appendChild(div2);
+
+    var div3 = document.createElement('div');
+    div3.className = "accordion-body";
+    var p = document.createElement('p');
+    p.innerHTML = summary;
+    div3.appendChild(p);
+
+    div1.appendChild(div3);
+
+    accordion.appendChild(div1);
 
 }
 
@@ -195,8 +213,8 @@ studySocket.onmessage = function(e) {
     else if(data.command == 'show_resources'){
         var tokens = data.tokens;
         var resources_data = data.all_resources;
-        var l = Object.keys(tokens);
-        namedent.innerHTML = l.length;
+        var keywords = Object.keys(tokens);
+        namedent.innerHTML = keywords.length;
         changeTextToPara(Object.keys(tokens), tokens);
         if(list.childElementCount){
             var p = list.parentElement;
@@ -208,7 +226,20 @@ studySocket.onmessage = function(e) {
         for(var i = 0; i < resources_data.length; i=i+1) {
             var resource_dir = resources_data[i];
             showResources(resource_dir, i+1);
-        } 
+        }
+        loadKeywords.style.visibility = "visible";
+        studySocket.send(JSON.stringify({
+            'command': 'get_wiki',
+            'keywords': keywords
+        }));
+    }
+    else if(data.command == 'show_keywords'){
+        var wiki_result = data.wiki_result;
+        var keywords = Object.keys(wiki_result);
+        for(var i=0; i < keywords.length; i=i+1){
+            showKeywords(keywords[i], wiki_result[keywords[i]]);
+        }
+        loadKeywords.style.visibility = "hidden";
     }
     
 }

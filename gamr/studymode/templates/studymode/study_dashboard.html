@@ -102,18 +102,23 @@
 
 	</div>
 
-	<div class="notesbox">
-		<div class="notesHeader">
-			<div class="title">
-				<span>Notes</span>
+	<!-- Keywords section starts-->
+	<div class="accordion" id="accordion">
+		<!-- <div class="accordion-wrap">
+			<div class="accordion-header" onclick="toggleclass(this)">
+				Keyword 1
 			</div>
-			<div class="topic">
-				<input type="text" class="heading" placeholder="Note Title">
-				<input type="text" class="subheading" placeholder="Sub-Heading">
+			<div class="accordion-body">
+				<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ducimus nam explicabo iusto obcaecati id vero, impedit ipsum voluptates iste aperiam? Aspernatur, repellat eos tempore porro ipsa commodi ipsam ducimus libero.
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem corrupti eum error, voluptates distinctio iure maiores. Recusandae asperiores, officia quisquam id ea nemo, sed est itaque possimus, dicta aliquid expedita?
+				</p>
 			</div>
-			<div class="expand">
-				<img src="{% static 'studymode/media/Expand.png' %}" width="16px" height="16px">
-			</div>	
+		</div> -->
+		<div class="load-9" id="loadkeywords">
+			<div class="spinner">
+			<div class="bubble-1"></div>
+			<div class="bubble-2"></div>
+			</div>
 		</div>
 	</div>
 
@@ -132,5 +137,6 @@
 			<div class="obj"></div>
 		</div>
 	</div>
+
 	<script src="{% static 'studymode/js/study.js' %}"></script>
 {% endblock content %}

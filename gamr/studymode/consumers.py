@@ -7,7 +7,7 @@ from lexrank.mappings.stopwords import STOPWORDS
 from path import Path
 from nltk.tokenize import sent_tokenize, RegexpTokenizer
 
-from .search_resources import final_resources 
+from .search_resources import final_resources, wiki_summary
 from .unfurling import OPG
 from .keyword_ner_search_query import NER
 
@@ -96,10 +96,18 @@ class StudyConsumer(AsyncWebsocketConsumer):
         
         return all_resources, tokens
 
+    async def get_wiki(self, keywords):
+        wiki_dict = {}
+        for keyword in keywords:
+            summary = wiki_summary(keyword)
+            wiki_dict.__setitem__(keyword, summary)
+
+        return wiki_dict
 
     commands = {
         'process_pasted_text':process_pasted_text,
-        'add_resources':add_resources
+        'add_resources':add_resources,
+        'get_wiki':get_wiki
     }
 
     # Receive message from WebSocket
@@ -134,6 +142,18 @@ class StudyConsumer(AsyncWebsocketConsumer):
                     'tokens':tokens
                 }
             )
+        
+        elif data['command'] == "get_wiki":
+            keywords = data['keywords']
+            wiki_result = await self.get_wiki(keywords)
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'command':'send_wiki',
+                    'wiki_result':wiki_result
+                }
+            )
         # Send message to room group
       
 
@@ -159,6 +179,13 @@ class StudyConsumer(AsyncWebsocketConsumer):
                 'command':'show_resources',
                 'all_resources':all_resources,
                 'tokens':tokens
+            }))
+        
+        elif event['command'] == 'send_wiki':
+            wiki_result = event['wiki_result']
+            await self.send(text_data=json.dumps({
+                'command':'show_keywords',
+                'wiki_result':wiki_result
             }))
         # Send message to WebSocket
      
